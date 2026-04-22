@@ -23,4 +23,5 @@ Thumbs.db
 
 # Misc
 *.md
+!AGENTS.md
 !README.md
