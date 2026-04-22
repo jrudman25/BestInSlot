@@ -9,9 +9,11 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.block.Blocks;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.*;
+
+@SuppressWarnings("null")
 public class AttributeQueryProvider implements ItemQueryProvider {
 
     private static final double BASE_ATTACK_DAMAGE = 1.0;
@@ -44,6 +46,7 @@ public class AttributeQueryProvider implements ItemQueryProvider {
         return results;
     }
 
+    @Nullable
     private CategorizedItem classify(ItemStack stack, ItemCategory category) {
         return switch (category) {
             case MELEE_WEAPONS -> classifyMelee(stack);
@@ -58,6 +61,7 @@ public class AttributeQueryProvider implements ItemQueryProvider {
         };
     }
 
+    @Nullable
     private CategorizedItem classifyMelee(ItemStack stack) {
         ItemAttributeModifiers modifiers = stack.getAttributeModifiers();
         if (modifiers.modifiers().isEmpty()) return null;
@@ -69,10 +73,10 @@ public class AttributeQueryProvider implements ItemQueryProvider {
         for (ItemAttributeModifiers.Entry entry : modifiers.modifiers()) {
             if (!matchesSlotGroup(entry.slot(), EquipmentSlotGroup.MAINHAND)) continue;
 
-            if (entry.attribute().is(Attributes.ATTACK_DAMAGE)) {
+            if (entry.attribute() == Attributes.ATTACK_DAMAGE) {
                 attackDamage += resolveModifierValue(entry.modifier());
                 hasAttackDamage = true;
-            } else if (entry.attribute().is(Attributes.ATTACK_SPEED)) {
+            } else if (entry.attribute() == Attributes.ATTACK_SPEED) {
                 attackSpeed += resolveModifierValue(entry.modifier());
             }
         }
@@ -92,6 +96,7 @@ public class AttributeQueryProvider implements ItemQueryProvider {
         return new CategorizedItem(stack, stats);
     }
 
+    @Nullable
     private CategorizedItem classifyArmor(ItemStack stack, EquipmentSlot slot) {
         Item item = stack.getItem();
         if (!(item instanceof ArmorItem armorItem)) return null;
@@ -109,11 +114,11 @@ public class AttributeQueryProvider implements ItemQueryProvider {
         for (ItemAttributeModifiers.Entry entry : modifiers.modifiers()) {
             if (!matchesSlotGroup(entry.slot(), slotGroup)) continue;
 
-            if (entry.attribute().is(Attributes.ARMOR)) {
+            if (entry.attribute() == Attributes.ARMOR) {
                 armor += resolveModifierValue(entry.modifier());
-            } else if (entry.attribute().is(Attributes.ARMOR_TOUGHNESS)) {
+            } else if (entry.attribute() == Attributes.ARMOR_TOUGHNESS) {
                 toughness += resolveModifierValue(entry.modifier());
-            } else if (entry.attribute().is(Attributes.KNOCKBACK_RESISTANCE)) {
+            } else if (entry.attribute() == Attributes.KNOCKBACK_RESISTANCE) {
                 kbResist += resolveModifierValue(entry.modifier());
             }
         }
@@ -127,6 +132,7 @@ public class AttributeQueryProvider implements ItemQueryProvider {
         return new CategorizedItem(stack, stats);
     }
 
+    @Nullable
     private CategorizedItem classifyTool(ItemStack stack, ToolType toolType) {
         Item item = stack.getItem();
         boolean matches = switch (toolType) {
@@ -149,7 +155,7 @@ public class AttributeQueryProvider implements ItemQueryProvider {
         ItemAttributeModifiers modifiers = stack.getAttributeModifiers();
         for (ItemAttributeModifiers.Entry entry : modifiers.modifiers()) {
             if (!matchesSlotGroup(entry.slot(), EquipmentSlotGroup.MAINHAND)) continue;
-            if (entry.attribute().is(Attributes.ATTACK_DAMAGE)) {
+            if (entry.attribute() == Attributes.ATTACK_DAMAGE) {
                 attackDamage += resolveModifierValue(entry.modifier());
             }
         }
@@ -162,6 +168,7 @@ public class AttributeQueryProvider implements ItemQueryProvider {
         return new CategorizedItem(stack, stats);
     }
 
+    @Nullable
     private CategorizedItem classifyRanged(ItemStack stack) {
         Item item = stack.getItem();
         boolean isRanged = item instanceof BowItem

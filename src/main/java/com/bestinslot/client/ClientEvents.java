@@ -13,6 +13,7 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.bus.api.IEventBus;
 import org.lwjgl.glfw.GLFW;
 
+@SuppressWarnings("null")
 @EventBusSubscriber(modid = BestInSlot.MODID, value = Dist.CLIENT)
 public class ClientEvents {
 

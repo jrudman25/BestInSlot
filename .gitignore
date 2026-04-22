@@ -16,6 +16,7 @@ runs/
 .classpath
 .project
 out/
+bin/
 
 # OS
 .DS_Store
