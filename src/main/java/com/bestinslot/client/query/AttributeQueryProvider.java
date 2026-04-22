@@ -17,6 +17,11 @@ public class AttributeQueryProvider implements ItemQueryProvider {
     private static final double BASE_ATTACK_DAMAGE = 1.0;
     private static final double BASE_ATTACK_SPEED = 4.0;
 
+    private static double durabilityOf(ItemStack stack) {
+        int maxDmg = stack.getMaxDamage();
+        return maxDmg > 0 ? (double) maxDmg : Double.MAX_VALUE;
+    }
+
     @Override
     public List<CategorizedItem> query(ItemCategory category, SortCriteria sort, boolean ascending) {
         List<CategorizedItem> results = new ArrayList<>();
@@ -82,7 +87,7 @@ public class AttributeQueryProvider implements ItemQueryProvider {
         stats.put(SortCriteria.ATTACK_DAMAGE, effectiveDamage);
         stats.put(SortCriteria.ATTACK_SPEED, effectiveSpeed);
         stats.put(SortCriteria.DPS, dps);
-        stats.put(SortCriteria.DURABILITY, (double) stack.getMaxDamage());
+        stats.put(SortCriteria.DURABILITY, durabilityOf(stack));
 
         return new CategorizedItem(stack, stats);
     }
@@ -117,7 +122,7 @@ public class AttributeQueryProvider implements ItemQueryProvider {
         stats.put(SortCriteria.ARMOR, armor);
         stats.put(SortCriteria.ARMOR_TOUGHNESS, toughness);
         stats.put(SortCriteria.KNOCKBACK_RESISTANCE, kbResist);
-        stats.put(SortCriteria.DURABILITY, (double) stack.getMaxDamage());
+        stats.put(SortCriteria.DURABILITY, durabilityOf(stack));
 
         return new CategorizedItem(stack, stats);
     }
@@ -152,7 +157,7 @@ public class AttributeQueryProvider implements ItemQueryProvider {
         Map<SortCriteria, Double> stats = new EnumMap<>(SortCriteria.class);
         stats.put(SortCriteria.MINING_SPEED, (double) miningSpeed);
         stats.put(SortCriteria.ATTACK_DAMAGE, BASE_ATTACK_DAMAGE + attackDamage);
-        stats.put(SortCriteria.DURABILITY, (double) stack.getMaxDamage());
+        stats.put(SortCriteria.DURABILITY, durabilityOf(stack));
 
         return new CategorizedItem(stack, stats);
     }
@@ -167,7 +172,7 @@ public class AttributeQueryProvider implements ItemQueryProvider {
         if (!isRanged) return null;
 
         Map<SortCriteria, Double> stats = new EnumMap<>(SortCriteria.class);
-        stats.put(SortCriteria.DURABILITY, (double) stack.getMaxDamage());
+        stats.put(SortCriteria.DURABILITY, durabilityOf(stack));
 
         return new CategorizedItem(stack, stats);
     }
